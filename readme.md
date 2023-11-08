@@ -1,4 +1,4 @@
-# 2023-2 cloud computing term report
+# 2023-2 Cloud Computing Term Project
 
 ## environment
 * gradle-7.5.1
