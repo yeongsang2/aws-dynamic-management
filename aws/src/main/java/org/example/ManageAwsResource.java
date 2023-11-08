@@ -35,7 +35,7 @@ import com.amazonaws.services.ec2.model.DescribeImagesResult;
 import com.amazonaws.services.ec2.model.Image;
 import com.amazonaws.services.ec2.model.Filter;
 
-public class awsTest {
+public class ManageAwsResource {
 
     static AmazonEC2 ec2;
 
@@ -53,7 +53,7 @@ public class awsTest {
         }
         ec2 = AmazonEC2ClientBuilder.standard()
                 .withCredentials(credentialsProvider)
-                .withRegion("us-east-1")	/* check the region at AWS console */
+                .withRegion("ap-southeast-2")	/* check the region at AWS console */
                 .build();
     }
 
