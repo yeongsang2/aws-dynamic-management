@@ -353,6 +353,12 @@ public class ManageAwsResource {
 
         String key_name = br.readLine();
 
+        if(!checkDuplicateKeyName(key_name)) {
+            System.out.println();
+            System.out.print("Key name already exists, you should use another key name");
+            return;
+        }
+
         final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
 
         CreateKeyPairRequest request = new CreateKeyPairRequest()
@@ -395,5 +401,19 @@ public class ManageAwsResource {
 
         System.out.printf(
                 "Successfully deleted key pair named %s", key_name);
+    }
+
+    public static boolean checkDuplicateKeyName(String keyName){
+
+        final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
+
+        DescribeKeyPairsResult response = ec2.describeKeyPairs();
+        for(KeyPairInfo key_pair : response.getKeyPairs()) {
+            if(keyName.equals(key_pair.getKeyName())){
+                return false;
+            }
+        }
+        return true;
+
     }
 }
