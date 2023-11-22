@@ -7,6 +7,9 @@ package org.example;
  * using AWS Java SDK Library
  *
  */
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.Scanner;
 import com.amazonaws.AmazonClientException;
@@ -20,6 +23,8 @@ import com.amazonaws.services.ec2.model.*;
 public class ManageAwsResource {
 
     static AmazonEC2 ec2;
+
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     private static void init() throws Exception {
 
@@ -58,7 +63,7 @@ public class ManageAwsResource {
             System.out.println("  3. start instance               4. available regions      ");
             System.out.println("  5. stop instance                6. create instance        ");
             System.out.println("  7. reboot instance              8. list images            ");
-            System.out.println("  9. list Key Pair                                          ");
+            System.out.println("  9. create key pair              10. list Key Pair          ");
             System.out.println("                                 99. quit                   ");
             System.out.println("------------------------------------------------------------");
 
@@ -129,6 +134,10 @@ public class ManageAwsResource {
                     break;
 
                 case 9:
+                    createKeyPair();
+                    break;
+
+                case 10:
                     listKeyPairs();
                     break;
 
@@ -328,6 +337,27 @@ public class ManageAwsResource {
                     images.getImageId(), images.getName(), images.getOwnerId());
         }
 
+    }
+
+    public static void createKeyPair() throws IOException {
+        final String USAGE =
+                "To run this example, supply a key pair name\n" +
+                        "Ex: CreateKeyPair <key-pair-name>\n";
+
+        System.out.println(USAGE);
+
+        String key_name = br.readLine();
+
+        final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
+
+        CreateKeyPairRequest request = new CreateKeyPairRequest()
+                .withKeyName(key_name);
+
+        CreateKeyPairResult response = ec2.createKeyPair(request);
+
+        System.out.printf(
+                "Successfully created key pair named %s",
+                key_name);
     }
 
     public static void listKeyPairs(){
