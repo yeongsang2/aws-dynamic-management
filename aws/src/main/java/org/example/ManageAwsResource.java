@@ -14,26 +14,8 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2ClientBuilder;
-import com.amazonaws.services.ec2.model.DescribeAvailabilityZonesResult;
-import com.amazonaws.services.ec2.model.DescribeInstancesResult;
-import com.amazonaws.services.ec2.model.Instance;
-import com.amazonaws.services.ec2.model.Reservation;
-import com.amazonaws.services.ec2.model.DescribeInstancesRequest;
-import com.amazonaws.services.ec2.model.DescribeRegionsResult;
-import com.amazonaws.services.ec2.model.Region;
-import com.amazonaws.services.ec2.model.AvailabilityZone;
-import com.amazonaws.services.ec2.model.DryRunSupportedRequest;
-import com.amazonaws.services.ec2.model.StopInstancesRequest;
-import com.amazonaws.services.ec2.model.StartInstancesRequest;
-import com.amazonaws.services.ec2.model.InstanceType;
-import com.amazonaws.services.ec2.model.RunInstancesRequest;
-import com.amazonaws.services.ec2.model.RunInstancesResult;
-import com.amazonaws.services.ec2.model.RebootInstancesRequest;
-import com.amazonaws.services.ec2.model.RebootInstancesResult;
-import com.amazonaws.services.ec2.model.DescribeImagesRequest;
-import com.amazonaws.services.ec2.model.DescribeImagesResult;
-import com.amazonaws.services.ec2.model.Image;
-import com.amazonaws.services.ec2.model.Filter;
+import com.amazonaws.services.ec2.model.*;
+
 
 public class ManageAwsResource {
 
@@ -76,6 +58,7 @@ public class ManageAwsResource {
             System.out.println("  3. start instance               4. available regions      ");
             System.out.println("  5. stop instance                6. create instance        ");
             System.out.println("  7. reboot instance              8. list images            ");
+            System.out.println("  9. list Key Pair                                          ");
             System.out.println("                                 99. quit                   ");
             System.out.println("------------------------------------------------------------");
 
@@ -143,6 +126,10 @@ public class ManageAwsResource {
 
                 case 8:
                     listImages();
+                    break;
+
+                case 9:
+                    listKeyPairs();
                     break;
 
                 case 99:
@@ -341,5 +328,20 @@ public class ManageAwsResource {
                     images.getImageId(), images.getName(), images.getOwnerId());
         }
 
+    }
+
+    public static void listKeyPairs(){
+        final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
+
+        DescribeKeyPairsResult response = ec2.describeKeyPairs();
+
+        for(KeyPairInfo key_pair : response.getKeyPairs()) {
+            System.out.printf(
+                    "Found key pair with name %s " +
+                            "and fingerprint %s",
+                    key_pair.getKeyName(),
+                    key_pair.getKeyFingerprint());
+            System.out.println();
+        }
     }
 }
