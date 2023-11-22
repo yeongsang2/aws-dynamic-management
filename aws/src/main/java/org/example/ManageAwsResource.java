@@ -63,7 +63,8 @@ public class ManageAwsResource {
             System.out.println("  3. start instance               4. available regions      ");
             System.out.println("  5. stop instance                6. create instance        ");
             System.out.println("  7. reboot instance              8. list images            ");
-            System.out.println("  9. create key pair              10. list Key Pair          ");
+            System.out.println("  9. create key pair              10. list Key Pair         ");
+            System.out.println("  11. delete key pair                                       ");
             System.out.println("                                 99. quit                   ");
             System.out.println("------------------------------------------------------------");
 
@@ -140,6 +141,11 @@ public class ManageAwsResource {
                 case 10:
                     listKeyPairs();
                     break;
+
+                case 11:
+                    deleteKeyPairs();
+                    break;
+
 
                 case 99:
                     System.out.println("bye!");
@@ -341,10 +347,9 @@ public class ManageAwsResource {
 
     public static void createKeyPair() throws IOException {
         final String USAGE =
-                "To run this example, supply a key pair name\n" +
-                        "Ex: CreateKeyPair <key-pair-name>\n";
+                "supply a key pair name which you want to create: ";
 
-        System.out.println(USAGE);
+        System.out.print(USAGE);
 
         String key_name = br.readLine();
 
@@ -354,6 +359,8 @@ public class ManageAwsResource {
                 .withKeyName(key_name);
 
         CreateKeyPairResult response = ec2.createKeyPair(request);
+
+        System.out.println(response);
 
         System.out.printf(
                 "Successfully created key pair named %s",
@@ -373,5 +380,20 @@ public class ManageAwsResource {
                     key_pair.getKeyFingerprint());
             System.out.println();
         }
+    }
+
+    public static void deleteKeyPairs() throws IOException {
+        final String USAGE =
+                "supply a key pair name which you want to delete: ";
+        System.out.print(USAGE);
+        String key_name = br.readLine();
+
+        final AmazonEC2 ec2 = AmazonEC2ClientBuilder.defaultClient();
+
+        DeleteKeyPairRequest request = new DeleteKeyPairRequest()
+                .withKeyName(key_name);
+
+        System.out.printf(
+                "Successfully deleted key pair named %s", key_name);
     }
 }
