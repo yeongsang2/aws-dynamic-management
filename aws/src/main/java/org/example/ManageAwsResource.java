@@ -333,7 +333,7 @@ public class ManageAwsResource {
         DescribeImagesRequest request = new DescribeImagesRequest();
         ProfileCredentialsProvider credentialsProvider = new ProfileCredentialsProvider();
 
-        request.getFilters().add(new Filter().withName("name").withValues("htcondor-slave-image"));
+        request.getFilters().add(new Filter().withName("name").withValues("aws-htcondor-slave"));
         request.setRequestCredentialsProvider(credentialsProvider);
 
         DescribeImagesResult results = ec2.describeImages(request);
@@ -416,4 +416,5 @@ public class ManageAwsResource {
         return true;
 
     }
+
 }
