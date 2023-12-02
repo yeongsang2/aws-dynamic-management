@@ -10,6 +10,8 @@ package org.example;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Scanner;
 import com.amazonaws.AmazonClientException;
@@ -64,7 +66,7 @@ public class ManageAwsResource {
             System.out.println("  5. stop instance                6. create instance        ");
             System.out.println("  7. reboot instance              8. list images            ");
             System.out.println("  9. create key pair              10. list Key Pair         ");
-            System.out.println("  11. delete key pair                                       ");
+            System.out.println("  11. delete key pair             12. condor status         ");
             System.out.println("                                 99. quit                   ");
             System.out.println("------------------------------------------------------------");
 
@@ -146,6 +148,9 @@ public class ManageAwsResource {
                     deleteKeyPairs();
                     break;
 
+                case 12:
+                    condorStatus();
+                    break;
 
                 case 99:
                     System.out.println("bye!");
@@ -154,6 +159,22 @@ public class ManageAwsResource {
                     return;
                 default: System.out.println("concentration!");
             }
+
+        }
+
+    }
+
+    private static void condorStatus() throws IOException {
+
+        //http
+        String condorStatus = RequestCondorStatus.getCondorStatus();
+
+        for (int i = 0; i < condorStatus.length(); i++) {
+
+            if( (i % 109 ) == 0){
+                System.out.println();
+            }
+            System.out.print(condorStatus.charAt(i));
 
         }
 
